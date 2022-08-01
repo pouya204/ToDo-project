@@ -27,6 +27,46 @@ function headingClickHandler() {
 heading.addEventListener("click" , headingClickHandler);
 
 
+
+const savedLCTodos = localStorage.getItem("todosList");
+const parseSavedLCTodos = JSON.parse(savedLCTodos) || [];
+
+let savedTodos = [...parseSavedLCTodos];
+
+
+const createNewTodo = (title,desc)=>{
+// create a list item for new todo
+const listItem = document.createElement('li');
+listItem.className = "list-item";
+// listItem.setAttribute("class", "list-item");
+const todoTitleHeading = document.createElement('h3');
+todoTitleHeading.innerHTML = title;
+const todoDescPara = document.createElement('p');
+todoDescPara.innerHTML = desc;
+//  put h3 and p into our list item
+listItem.appendChild(todoTitleHeading);
+listItem.appendChild(todoDescPara);
+
+console.log(listItem);
+
+mainlist.appendChild(listItem);
+// create action buttons for our todo
+const todoActions = `<div>
+ <button>del</button>  
+ <button>edit</button>
+ <button>update</button>
+ </div>`;
+// put action buttons to our list item
+ listItem.innerHTML += todoActions
+//  put our list item into our main ul
+ mainlist.appendChild(listItem);
+}
+
+
+savedTodos.forEach(todo => 
+    createNewTodo(todo.title,todo.desc)
+);
+
 // handle add new todo
 const handleCreatNewTodo = (event) => {
     // prevent to render page by form
@@ -39,31 +79,11 @@ const handleCreatNewTodo = (event) => {
         desc: tododesc.value,
     };
 
-    // create a list item for new todo
-    const listItem = document.createElement('li');
-    listItem.className = "list-item";
-    // listItem.setAttribute("class", "list-item");
-    const todoTitleHeading = document.createElement('h3');
-    todoTitleHeading.innerHTML = NewTodo.title;
-    const todoDescPara = document.createElement('p');
-    todoDescPara.innerHTML = NewTodo.desc;
-    //  put h3 and p into our list item
-    listItem.appendChild(todoTitleHeading);
-    listItem.appendChild(todoDescPara);
+    savedTodos.push(NewTodo);
+    console.log(savedTodos);
+    localStorage.setItem('todosList' , JSON.stringify(savedTodos))
 
-    console.log(listItem);
-
-    mainlist.appendChild(listItem);
-    // create action buttons for our todo
-    const todoActions = `<div>
-     <button>del</button>  
-     <button>edit</button>
-     <button>update</button>
-     </div>`;
-    // put action buttons to our list item
-     listItem.innerHTML += todoActions
-    //  put our list item into our main ul
-     mainlist.appendChild(listItem);
+    createNewTodo(NewTodo.title,NewTodo.desc)
 
 
 // console.log(NewTodo , newTodoListItem);
@@ -95,3 +115,12 @@ document.getElementById("strong").addEventListener('click' , ()=>{
     const result = parseInt(document.getElementById('test').vlaue) + parseInt (document.getElementById("test2").vlaue);
     document.getElementById("strong").innerHTML += result;
 })
+
+
+// console.log(localStorage);
+// localStorage.setItem('username' , 'elhami');
+
+// const user = localStorage.getItem('username');
+// document.body.innerHTML += user;
+
+
